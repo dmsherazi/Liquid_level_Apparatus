@@ -9,7 +9,8 @@
 #define USER_LIQUIDLEVEL_ADC_H_
 
 void adc_storeVoltage(u32 adc_data);
-double adc_calculateVoltage(void);
+double adc_calculatePressure(void);
+
 
 #endif /* USER_LIQUIDLEVEL_ADC_H_ */
 

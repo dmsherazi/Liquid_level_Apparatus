@@ -126,7 +126,8 @@ void msg_upload(char* devid, double pressure)
     float latitude = 0.0;
     float longitude = 0.0;
 
-	LOG_INFO("pressure data upload: %s=%f", devid, pressure);
+    LOG_INFO("current data upload: %s=%fmA", devid, pressure / 10.0 * 16.0 + 4);
+	LOG_INFO("pressure data upload: %s=%fKpa", devid, pressure);
 
 	snprintf(value, 16, "%f", pressure);
 

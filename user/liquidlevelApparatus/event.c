@@ -213,7 +213,7 @@ int event_timer(const EatEvent_st* event)
             eat_timer_start(event->data.timer.timer_id, setting_getUploadPeriod());
             if(socket_conneted())
             {
-                msg_upload("device001",adc_calculateVoltage());
+                msg_upload("device001",adc_calculatePressure());
                 LOG_INFO("upload data!");//to upload
             }
             break;
