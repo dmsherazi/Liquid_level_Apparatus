@@ -2,8 +2,8 @@
 // Created by jk on 2015/7/1.
 //
 
-#ifndef FIREHYDRANT_FIRMWARE_THREAD_MSG_H
-#define FIREHYDRANT_FIRMWARE_THREAD_MSG_H
+#ifndef LIQUIDLEVEL_FIRMWARE_THREAD_MSG_H
+#define LIQUIDLEVEL_FIRMWARE_THREAD_MSG_H
 
 #include <eat_type.h>
 #include <eat_interface.h>
@@ -28,4 +28,4 @@ MSG_THREAD* allocMsg(u8 len);
 void freeMsg(MSG_THREAD* msg);
 eat_bool sendMsg(EatUser_enum from, EatUser_enum to, void* msg, u8 len);
 
-#endif //FIREHYDRANT_FIRMWARE_MSG_H
+#endif //LIQUIDLEVEL_FIRMWARE_MSG_H

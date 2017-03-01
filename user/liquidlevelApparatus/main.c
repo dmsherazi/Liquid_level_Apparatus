@@ -108,10 +108,10 @@ void app_func_ext1(void *data)
         EAT_UART_PARITY_NONE
     };
 
-    eat_uart_set_at_port(EAT_UART_USB);// UART1 is as AT PORT
+    eat_uart_set_at_port(EAT_UART_NULL);// UART1 is as AT PORT
 
-    //eat_uart_set_debug(EAT_UART_USB);
-    eat_uart_set_debug(EAT_UART_1);
+    eat_uart_set_debug(EAT_UART_USB);
+    //eat_uart_set_debug(EAT_UART_1);
     eat_uart_set_debug_config(EAT_UART_DEBUG_MODE_UART, &cfg);
 }
 

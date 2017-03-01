@@ -5,8 +5,8 @@
  *      Author: jk
  */
 
-#ifndef USER_FIREHYDRANT_STATE_H_
-#define USER_FIREHYDRANT_STATE_H_
+#ifndef USER_LIQUIDLEVEL_STATE_H_
+#define USER_LIQUIDLEVEL_STATE_H_
 
 #include <eat_type.h>
 
@@ -18,4 +18,4 @@ void set_socket_state(eat_bool connected);
 typedef void (*SOCKET_TRIGGER)(eat_bool state);
 void set_socket_trigger(SOCKET_TRIGGER pfn);
 
-#endif /* USER_FIREHYDRANT_STATE_H_ */
+#endif /* USER_LIQUIDLEVEL_STATE_H_ */

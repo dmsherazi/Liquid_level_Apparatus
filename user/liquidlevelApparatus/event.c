@@ -188,6 +188,11 @@ int event_timer(const EatEvent_st* event)
         case TIMER_WATCHDOG:
             LOG_INFO("TIMER_WATCHDOG expire!");
             feedWatchdog();
+            if(!socket_conneted())
+            {
+                //reconnect the socket
+	            eat_timer_start(TIMER_AT_CMD, 5000);
+            }
             eat_timer_start(event->data.timer.timer_id, WATCHDOG_FEED);
             break;
 
@@ -210,11 +215,6 @@ int event_timer(const EatEvent_st* event)
             {
                 msg_upload("device001",adc_calculateVoltage());
                 LOG_INFO("upload data!");//to upload
-            }
-            else
-            {
-                //reconnect the socket
-	            eat_timer_start(TIMER_AT_CMD, 5000);
             }
             break;
 

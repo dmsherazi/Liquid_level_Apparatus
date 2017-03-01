@@ -5,8 +5,8 @@
  *      Author: jk
  */
 
-#ifndef USER_FIREHYDRANT_MSG_H_
-#define USER_FIREHYDRANT_MSG_H_
+#ifndef USER_LIQUIDLEVEL_MSG_H_
+#define USER_LIQUIDLEVEL_MSG_H_
 
 #include <stdio.h>
 
@@ -27,4 +27,4 @@ void* alloc_rspMsg(const MSG_HEADER* pMsg);
 
 void free_msg(void* msg);
 
-#endif /* USER_FIREHYDRANT_MSG_H_ */
+#endif /* USER_LIQUIDLEVEL_MSG_H_ */
