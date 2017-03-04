@@ -11,13 +11,15 @@
 
 void* alloc_msg(u16 cmd, size_t length)
 {
+    static char seq = 0;
     MSG_HEADER* msg = eat_mem_alloc(length);
 
     if (msg)
     {
-        msg->signature = htonl(SIGNATURE);
-        msg->length = htonl(length - sizeof(MSG_HEADER));
-        msg->cmd = htons(cmd);
+        msg->signature = htons(SIGNATURE);
+        msg->length = htons(length - sizeof(MSG_HEADER));
+        msg->cmd = cmd;
+        msg->seq = seq++;
     }
 
     return msg;

@@ -30,14 +30,12 @@ typedef struct
 void msg_heartbeat(void);
 
 
-static int msg_setting(const void* msg);
 static int msg_heartbeatyRsp(const void* msg);
 
 
 
 static MC_MSG_PROC msgProcs[] =
 {
-        {CMD_SETTING, msg_setting},
 		{CMD_PING, msg_heartbeatyRsp},
 };
 
@@ -93,34 +91,11 @@ void msg_heartbeat(void)
 	socket_sendData(msg, msgLen);
 }
 
-static int msg_setting(const void* m)
-{
-	const MSG_HEADER* msg = m;
-	PARAM* param = (PARAM*)msg->param;
-	int gra = 0;
-
-	if (ntohl(msg->length) != (sizeof(PARAM) + ntohs(param->length)))
-	{
-		LOG_ERROR("Message length not match");
-		return 1;
-	}
-
-	gra = atoi(param->data);
-	if (gra)
-	{
-		LOG_DEBUG("setting samle period to %d", gra);
-		setting_setSamplePeriod(gra);
-	}
-
-    return 0;
-}
 
 void msg_upload(char* devid, double pressure)
 {
 	size_t msgLen = 0;
-	MSG_HEADER* msg = NULL;
-
-	PARAM* param = NULL;
+	LIQUIDLEVEL_INFO* msg = NULL;
 
 	char value[16] = {0};
     float latitude = 0.0;
@@ -131,11 +106,8 @@ void msg_upload(char* devid, double pressure)
 
 	snprintf(value, 16, "%f", pressure);
 
-	msgLen = sizeof(MSG_HEADER) +
-			 sizeof(short) + strlen(devid) +
-			 sizeof(short) + strlen(value);
+	msgLen = sizeof(LIQUIDLEVEL_INFO) + strlen(devid);
 	msg = alloc_msg(CMD_SAMPLE, msgLen);
-
 	if (!msg)
 	{
 		LOG_ERROR("alloc msg failed");
@@ -145,24 +117,18 @@ void msg_upload(char* devid, double pressure)
     if(gps.isGPS)
     {
         msg->latitude = gps.latitude;
-        msg->longitude = gps.longitude;
+        msg->longitude= gps.longitude;
     }
     else
     {
-        msg->latitude = 0;
-        msg->longitude = 0;
+        msg->latitude = 0.0;
+        msg->longitude = 0.0;
     }
-
-	param = (PARAM*)msg->param;
-	param->length = ntohs(strlen(devid));
-	memcpy(param->data, devid, strlen(devid));
-
-	param = (PARAM*)(msg->param + sizeof(short) + strlen(devid));
-	param->length = ntohs(strlen(value));
-	memcpy(param->data, value, strlen(value));
+    msg->timestamp = rtc_getTimestamp();
+    msg->pressure = pressure;
+    strncpy(msg->deviceID, devid, strlen(devid));
 
 	socket_sendData(msg, msgLen);
-
 	return;
 }
 

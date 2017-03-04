@@ -17,7 +17,7 @@
 #define SERVER_IP2 89
 #define SERVER_IP3 104
 #define SERVER_IP4 130
-#define SERVER_PORT 9880
+#define SERVER_PORT 9999
 
 #define HEARTBEAT (3 * 60 * 1000)	/* 3 minutes */
 

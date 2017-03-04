@@ -157,7 +157,7 @@ void event_gps_proc(void)
     rc = eat_gps_nmea_info_output(EAT_NMEA_OUTPUT_SIMCOM, buf, 1024);
     if(rc == EAT_FALSE)
     {
-        LOG_ERROR("get gps error ,and erturn is %d",rc);
+        LOG_ERROR("get gps error ,and return is %d",rc);
     }
 
     LOG_DEBUG("%s",buf);
