@@ -169,7 +169,6 @@ void event_gps_proc(void)
 
     if(longitude > 0 && latitude > 0)//get GPS
     {
-        setting_setGPSPeriod(60 * 60 *1000);
         gps.isGPS = EAT_TRUE;
         gps.latitude = latitude;
         gps.longitude = longitude;
