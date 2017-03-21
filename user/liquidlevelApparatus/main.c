@@ -159,13 +159,11 @@ void app_main(void *data)
 
     startWatchdog();
 
-    eat_gps_power_req(EAT_TRUE);
 
     eat_timer_start(TIMER_WATCHDOG, WATCHDOG_FEED);
     eat_timer_start(TIMER_AT_CMD, 5000);
     //eat_timer_start(TIMER_HEARTBEAT, setting_getHeartbeat());
     eat_timer_start(TIMER_UPLOAD, setting_getUploadPeriod());
-    eat_timer_start(TIMER_GPS, setting_getGPSPeriod());
 
     eat_adc_get(EAT_PIN23_ADC1, SAMPLE_PERIOD, NULL);
 

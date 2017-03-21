@@ -217,12 +217,6 @@ int event_timer(const EatEvent_st* event)
             }
             break;
 
-        case TIMER_GPS:
-            LOG_DEBUG("TIMER_GPS expire!");
-            event_gps_proc();
-            eat_timer_start(event->data.timer.timer_id, setting_getGPSPeriod());
-            break;
-
         default:
             LOG_ERROR ("timer(%d) not processed", event->data.timer.timer_id);
             break;

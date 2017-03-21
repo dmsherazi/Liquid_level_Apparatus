@@ -62,7 +62,7 @@ void log_hex(const char* data, int length)
 
 void log_binary(const char* data, int length)
 {
-    char buf[512] = {0};
+    char buf[1024] = {0};
     int i = 0;
 
     for (i = 0; i < length && i < 170; i++)

@@ -106,35 +106,16 @@ void msg_upload(char* devid, double pressure)
 {
     char* content = NULL;
     cJSON *msg = cJSON_CreateObject();
-    cJSON *header = cJSON_CreateObject();
 
     LOG_INFO("current data upload: %s=%fmA", devid, pressure / 10.0 * 16.0 + 4);
 	LOG_INFO("pressure data upload: %s=%fKpa", devid, pressure);
 
-    cJSON_AddNumberToObject(header, TAG_SIGNATURE, SIGNATURE);
-    cJSON_AddNumberToObject(header, TAG_CMD, CMD_SAMPLE);
-    cJSON_AddItemToObject(msg, TAG_HEADER, header);
-
-    cJSON_AddNumberToObject(msg, TAG_PRESSURE, pressure);
+    cJSON_AddNumberToObject(msg, TAG_CMD, CMD_SAMPLE);
     cJSON_AddStringToObject(msg, TAG_DEVICEID, devid);
-
-    if(gps.isGPS)
-    {
-        cJSON_AddNumberToObject(msg, TAG_LONGITUDE, gps.longitude);
-        cJSON_AddNumberToObject(msg, TAG_LATITUDE, gps.latitude);
-    }
-    else
-    {
-        cJSON_AddNumberToObject(msg, TAG_LONGITUDE, 0.0);
-        cJSON_AddNumberToObject(msg, TAG_LATITUDE, 0.0);
-    }
-
-    cJSON_AddNumberToObject(msg, TAG_TIMESTAMP, rtc_getTimestamp());
+    cJSON_AddNumberToObject(msg, TAG_PRESSURE, pressure);
 
     content = cJSON_PrintUnformatted(msg);
 
-    LOG_DEBUG ("%s\n",content);
-    LOG_DEBUG("%d\n",strlen(content));
 	socket_sendData(content, strlen(content));
 
     cJSON_Delete(msg);
