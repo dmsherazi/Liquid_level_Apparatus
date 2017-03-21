@@ -121,6 +121,7 @@ void app_main(void *data)
     EatEvent_st event;
     eat_bool rc;
     EatUartConfig_st uart_config;
+
 /*
     if(eat_uart_open(eat_uart_app ) == EAT_FALSE)
     {
@@ -162,7 +163,7 @@ void app_main(void *data)
 
     eat_timer_start(TIMER_WATCHDOG, WATCHDOG_FEED);
     eat_timer_start(TIMER_AT_CMD, 5000);
-    eat_timer_start(TIMER_HEARTBEAT, setting_getHeartbeat());
+    //eat_timer_start(TIMER_HEARTBEAT, setting_getHeartbeat());
     eat_timer_start(TIMER_UPLOAD, setting_getUploadPeriod());
     eat_timer_start(TIMER_GPS, setting_getGPSPeriod());
 

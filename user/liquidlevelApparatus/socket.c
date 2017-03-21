@@ -350,7 +350,6 @@ s32 socket_sendData(void* data, s32 len)
 
     LOG_BIN(data, len);
 
-
     free_msg(data);  //TODO: is it ok to free the msg here???
 
     return rc;

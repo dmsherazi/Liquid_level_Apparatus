@@ -13,6 +13,8 @@
 #include "setting.h"
 #include "macro.h"
 #include "log.h"
+#include "cJSON.h"
+
 
 
 #define SETITINGFILE_NAME  L"C:\\setting.txt"
@@ -49,6 +51,15 @@ eat_bool setting_initial(void)
     FS_HANDLE seekRet;
     eat_fs_error_enum fs_Op_ret;
     UINT readLen;
+
+    cJSON_Hooks mem_hooks;
+
+    mem_hooks.malloc_fn = eat_mem_alloc;
+    mem_hooks.free_fn = eat_mem_free;
+
+    LOG_DEBUG("setting initial to default value.");
+
+    cJSON_InitHooks(&mem_hooks);//initial the cJSON memory hook
 
     setting.addr_type = ADDR_TYPE_IP;
 

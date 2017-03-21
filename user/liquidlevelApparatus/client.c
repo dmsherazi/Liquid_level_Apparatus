@@ -9,6 +9,7 @@
 #include <string.h>
 
 #include <eat_interface.h>
+#include <eat_mem.h>
 
 #include "client.h"
 #include "socket.h"
@@ -17,7 +18,16 @@
 #include "uart.h"
 #include "state.h"
 #include "setting.h"
+#include "cJSON.h"
 
+#define TAG_CMD "CMD"
+#define TAG_SIGNATURE "SIGNATURE"
+#define TAG_HEADER "HEADER"
+#define TAG_TIMESTAMP "TIMESTAMP"
+#define TAG_LONGITUDE "LONGITUDE"
+#define TAG_LATITUDE "LATITUDE"
+#define TAG_PRESSURE "PRESSURE"
+#define TAG_DEVICEID "DEVICEID"
 
 
 typedef int (*MSG_PROC)(const void* msg);
@@ -94,41 +104,43 @@ void msg_heartbeat(void)
 
 void msg_upload(char* devid, double pressure)
 {
-	size_t msgLen = 0;
-	LIQUIDLEVEL_INFO* msg = NULL;
-
-	char value[16] = {0};
-    float latitude = 0.0;
-    float longitude = 0.0;
+    char* content = NULL;
+    cJSON *msg = cJSON_CreateObject();
+    cJSON *header = cJSON_CreateObject();
 
     LOG_INFO("current data upload: %s=%fmA", devid, pressure / 10.0 * 16.0 + 4);
 	LOG_INFO("pressure data upload: %s=%fKpa", devid, pressure);
 
-	snprintf(value, 16, "%f", pressure);
+    cJSON_AddNumberToObject(header, TAG_SIGNATURE, SIGNATURE);
+    cJSON_AddNumberToObject(header, TAG_CMD, CMD_SAMPLE);
+    cJSON_AddItemToObject(msg, TAG_HEADER, header);
 
-	msgLen = sizeof(LIQUIDLEVEL_INFO) + strlen(devid);
-	msg = alloc_msg(CMD_SAMPLE, msgLen);
-	if (!msg)
-	{
-		LOG_ERROR("alloc msg failed");
-		return;
-	}
+    cJSON_AddNumberToObject(msg, TAG_PRESSURE, pressure);
+    cJSON_AddStringToObject(msg, TAG_DEVICEID, devid);
 
     if(gps.isGPS)
     {
-        msg->latitude = gps.latitude;
-        msg->longitude= gps.longitude;
+        cJSON_AddNumberToObject(msg, TAG_LONGITUDE, gps.longitude);
+        cJSON_AddNumberToObject(msg, TAG_LATITUDE, gps.latitude);
     }
     else
     {
-        msg->latitude = 0.0;
-        msg->longitude = 0.0;
+        cJSON_AddNumberToObject(msg, TAG_LONGITUDE, 0.0);
+        cJSON_AddNumberToObject(msg, TAG_LATITUDE, 0.0);
     }
-    msg->timestamp = rtc_getTimestamp();
-    msg->pressure = pressure;
-    strncpy(msg->deviceID, devid, strlen(devid));
 
-	socket_sendData(msg, msgLen);
+    cJSON_AddNumberToObject(msg, TAG_TIMESTAMP, rtc_getTimestamp());
+
+    content = cJSON_PrintUnformatted(msg);
+
+    LOG_DEBUG ("%s\n",content);
+    LOG_DEBUG("%d\n",strlen(content));
+	socket_sendData(content, strlen(content));
+
+    cJSON_Delete(msg);
+
+    LOG_DEBUG("UPLOAD FINISH\n");
+
 	return;
 }
 

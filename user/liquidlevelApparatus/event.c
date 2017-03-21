@@ -200,13 +200,13 @@ int event_timer(const EatEvent_st* event)
             eat_modem_write("AT+CGATT?\n", 10);
             eat_timer_start(event->data.timer.timer_id, 5000);
             break;
-
+/*
         case TIMER_HEARTBEAT:
             LOG_INFO("TIMER_HEARTBEAT expire!");
             eat_timer_start(event->data.timer.timer_id, setting_getHeartbeat());
             msg_heartbeat();
             break;
-
+*/
         case TIMER_UPLOAD:
             LOG_INFO("TIMER_SAMPLE expire!");
             eat_timer_start(event->data.timer.timer_id, setting_getUploadPeriod());
